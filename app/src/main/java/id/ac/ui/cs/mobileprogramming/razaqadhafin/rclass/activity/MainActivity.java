@@ -1,8 +1,10 @@
-package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass;
+package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.R;
 
 public class MainActivity extends AppCompatActivity {
 
