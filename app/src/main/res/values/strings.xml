@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RClass</string>
+    <string name="create_new_account">Create New Account</string>
+    <string name="enter_your_name">Enter your name</string>
 </resources>
