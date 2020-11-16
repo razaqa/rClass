@@ -1,5 +1,15 @@
 <resources>
     <string name="app_name">RClass</string>
     <string name="create_new_account">Create New Account</string>
+    <string name="change_new_account">Change New Account</string>
+    <string name="hello">Hi! Please register first..</string>
+    <string name="welcome">Welcome back</string>
+    <string name="log_in">Log In</string>
     <string name="enter_your_name">Enter your name</string>
+    <string name="title_activity_dashboard">DashboardActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
 </resources>
