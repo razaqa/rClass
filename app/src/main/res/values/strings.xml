@@ -2,11 +2,49 @@
     <string name="app_name">RClass</string>
     <string name="create_new_account">Create New Account</string>
     <string name="change_new_account">Change New Account</string>
-    <string name="hello">Hi! Please register first..</string>
-    <string name="welcome">Welcome back</string>
+    <string name="greeting">hi.. please register first!</string>
+    <string name="welcome_back">welcome back</string>
     <string name="log_in">Log In</string>
     <string name="enter_your_name">Enter your name</string>
     <string name="title_activity_dashboard">DashboardActivity</string>
+
+    <string name="title_activity_classroom_registration">Add New Classroom</string>
+    <string name="classroom_name">Name</string>
+    <string name="classroom_end_date">End Date</string>
+    <string name="classroom_start_date">Start Date</string>
+    <string name="classroom_schedule">Schedule</string>
+    <string name="format_example_title">Format Example:</string>
+    <string name="format_example_content1">TKTPL</string>
+    <string name="format_example_content2">11-11-2020</string>
+    <string name="format_example_content3">12-12-2020</string>
+    <string name="format_example_content4">Monday,09:00-Monday,10.00;Friday,11:00-Friday,12:00</string>
+    <string name="create_classroom">Create Classroom</string>
+
+    <string name="hello">Hello,  </string>
+    <string name="header_percentage">0%</string>
+    <string name="header_title_total">Your Total Class Attendance</string>
+    <string name="header_title_selected">Your Selected Class Attendance</string>
+
+    <string name="title_fragment_classroom_list">Classroom - All</string>
+    <string name="add_new_classroom">Add New Classroom</string>
+    <string name="present">present</string>
+    <string name="absent">absent</string>
+    <string name="not_started">not started</string>
+
+    <string name="title_fragment_classroom_info">Classroom - Info</string>
+    <string name="attend_this_class">Attend</string>
+    <string name="absent_this_class">Absent</string>
+    <string name="mark_as_absent">Mark As Absent</string>
+    <string name="label_classroom_name">Name</string>
+    <string name="label_classroom_start_date">Start</string>
+    <string name="label_classroom_end_date">End</string>
+    <string name="label_classroom_present">Present</string>
+    <string name="label_classroom_absent">Absent</string>
+    <string name="label_classroom_percentage">%</string>
+    <string name="label_classroom_today">Today</string>
+    <string name="label_classroom_schedule">Sched</string>
+    <string name="sync">Sync</string>
+
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
