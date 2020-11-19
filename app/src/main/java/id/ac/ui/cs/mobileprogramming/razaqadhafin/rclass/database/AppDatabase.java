@@ -10,20 +10,27 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.application.BasicApp;
+import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.dao.AttendanceDao;
+import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.dao.ClassroomDao;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.dao.UserDao;
+import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.Attendance;
+import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.Classroom;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.User;
 
-@Database(entities = {User.class}, version = 1)
+@Database(entities = {User.class, Classroom.class, Attendance.class}, version = 1)
+@TypeConverters({DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDao userDao();
+    public abstract ClassroomDao classroomDao();
+    public abstract AttendanceDao attendanceDao();
 
     private static AppDatabase instance;
     private static final int NUMBER_OF_THREADS = 4;
@@ -86,8 +93,6 @@ public abstract class AppDatabase extends RoomDatabase {
     private static void seedData(final AppDatabase database) {
         database.runInTransaction(() -> {
             // Insert pre-population data with Dao
-            List<User> users = DataGenerator.generateUsers();
-            database.userDao().insertAll(users);
         });
     }
 
