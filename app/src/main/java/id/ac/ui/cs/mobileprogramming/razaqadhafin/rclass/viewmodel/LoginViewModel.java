@@ -1,44 +1,36 @@
 package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.application.BasicApp;
-import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.database.AppDatabase;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.User;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.repository.UserRepository;
 
-public class UserViewModel extends AndroidViewModel {
+public class LoginViewModel extends AndroidViewModel {
 
-    private static UserViewModel instance;
+    private static LoginViewModel instance;
+    private UserRepository userRepository;
 
     private LiveData<Integer> userCount;
     private LiveData<User> currentUser;
-    private UserRepository userRepository;
 
-    public static UserViewModel getInstance(Application application) {
+    public static LoginViewModel getInstance(Application application) {
         if (instance == null) {
-            instance = new UserViewModel(application);
+            instance = new LoginViewModel(application);
         }
         return instance;
     }
 
-    public UserViewModel (Application application) {
+    public LoginViewModel(Application application) {
         super(application);
         userRepository = BasicApp.getUserRepository();
         currentUser = userRepository.getCurrentUser();
         userCount = userRepository.getUserCount();
-    }
-
-    public List<User> getAllUsers() {
-        return userRepository.loadAllUsers();
     }
 
     public LiveData<Integer> getUserCount() {

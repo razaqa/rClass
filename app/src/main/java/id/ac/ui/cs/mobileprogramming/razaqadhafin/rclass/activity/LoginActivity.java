@@ -1,12 +1,10 @@
 package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,11 +15,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.R;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.User;
-import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.UserViewModel;
+import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.LoginViewModel;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
-    private UserViewModel userViewModel;
+    private LoginViewModel userViewModel;
 
     @BindView(R.id.textViewHello)
     TextView textViewHello;
@@ -35,11 +33,11 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.buttonLogin)
     Button buttonLogin;
 
-    @BindString(R.string.hello)
-    String helloText;
+    @BindString(R.string.greeting)
+    String greetingText;
 
-    @BindString(R.string.welcome)
-    String welcomeText;
+    @BindString(R.string.welcome_back)
+    String welcomeBackText;
 
     @BindString(R.string.create_new_account)
     String createNewAccountText;
@@ -51,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         setUpLayoutBasedOnUser();
     }
 
@@ -62,12 +60,13 @@ public class MainActivity extends AppCompatActivity {
         userViewModel.getUserCount().observe(this, count -> {
             if(count != 0) {
                 userViewModel.getCurrentUser().observe(this, user -> {
-                    textViewHello.setText(String.format("%s, %s!", welcomeText, user.getName()));
+                    textViewHello.setText(String.format("%s, %s!", welcomeBackText, user.getName()));
+                    editTextPersonName.setText(user.getName());
                 });
                 buttonCreateAccount.setText(changeNewAccountText);
                 buttonLogin.setEnabled(true);
             } else {
-                textViewHello.setText(helloText);
+                textViewHello.setText(greetingText);
                 buttonCreateAccount.setText(createNewAccountText);
                 buttonLogin.setEnabled(false);
             }
@@ -75,13 +74,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onButtonLoginClicked(View view) {
-        Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
+        Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
         startActivity(intent);
     }
 
     public void onButtonChangeNewAccountClicked(View view) {
         replaceAccount();
-        Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
+        Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
         startActivity(intent);
     }
 
