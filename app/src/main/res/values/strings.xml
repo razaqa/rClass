@@ -41,7 +41,7 @@
     <string name="label_classroom_present">Present</string>
     <string name="label_classroom_absent">Absent</string>
     <string name="label_classroom_percentage">%</string>
-    <string name="label_classroom_today">Today</string>
+    <string name="label_classroom_today">Status</string>
     <string name="label_classroom_schedule">Sched</string>
     <string name="sync">Sync</string>
 
