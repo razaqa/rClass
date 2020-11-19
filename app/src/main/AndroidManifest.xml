@@ -11,8 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RClass">
         <activity android:name=".activity.DashboardActivity"></activity>
+        <activity android:name=".activity.ClassroomRegistrationActivity"></activity>
 
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
