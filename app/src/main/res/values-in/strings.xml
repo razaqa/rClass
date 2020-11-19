@@ -18,7 +18,7 @@
     <string name="format_example_content2">11-11-2020</string>
     <string name="format_example_content3">12-12-2020</string>
     <string name="format_example_content4">Senin,09:00-Senin,10:00;Kamis,11:00-Kamis,12:00</string>
-    <string name="create_classroom">Create Classroom</string>
+    <string name="create_classroom">Buat Kelas</string>
 
     <string name="hello">Halo,  </string>
     <string name="header_percentage">0%</string>
@@ -31,19 +31,19 @@
     <string name="absent">absen</string>
     <string name="not_started">blm mulai</string>
 
-    <string name="title_fragment_classroom_info">Classroom - Info</string>
-    <string name="attend_this_class">Attend</string>
-    <string name="absent_this_class">Absent</string>
-    <string name="mark_as_absent">Mark As Absent</string>
-    <string name="label_classroom_name">Name</string>
-    <string name="label_classroom_start_date">Start</string>
-    <string name="label_classroom_end_date">End</string>
-    <string name="label_classroom_present">Present</string>
-    <string name="label_classroom_absent">Absent</string>
+    <string name="title_fragment_classroom_info">Kelas - Info</string>
+    <string name="attend_this_class">Hadir</string>
+    <string name="absent_this_class">Absen</string>
+    <string name="mark_as_absent">Tandai Absen</string>
+    <string name="label_classroom_name">Nama</string>
+    <string name="label_classroom_start_date">Mulai</string>
+    <string name="label_classroom_end_date">Selesai</string>
+    <string name="label_classroom_present">Hadir</string>
+    <string name="label_classroom_absent">Absen</string>
     <string name="label_classroom_percentage">%</string>
-    <string name="label_classroom_today">Today</string>
-    <string name="label_classroom_schedule">Sched</string>
-    <string name="sync">Sync</string>
+    <string name="label_classroom_today">Status</string>
+    <string name="label_classroom_schedule">Jadwal</string>
+    <string name="sync">Sinkron</string>
 
     <!--
     This string is used for square devices and overridden by hello_world in
