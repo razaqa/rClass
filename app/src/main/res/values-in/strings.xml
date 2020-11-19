@@ -1,35 +1,35 @@
 <resources>
     <string name="app_name">RClass</string>
-    <string name="create_new_account">Create New Account</string>
-    <string name="change_new_account">Change New Account</string>
-    <string name="greeting">hi.. please register first!</string>
-    <string name="welcome_back">welcome back</string>
-    <string name="log_in">Log In</string>
-    <string name="enter_your_name">Enter your name</string>
+    <string name="create_new_account">Buat Nama Akun</string>
+    <string name="change_new_account">Ubah Nama Akun</string>
+    <string name="greeting">hi.. daftar dulu yaa!</string>
+    <string name="welcome_back">selamat datang</string>
+    <string name="log_in">Masuk</string>
+    <string name="enter_your_name">Masukkan nama</string>
     <string name="title_activity_dashboard">DashboardActivity</string>
 
-    <string name="title_activity_classroom_registration">Add New Classroom</string>
-    <string name="classroom_name">Name</string>
-    <string name="classroom_end_date">End Date</string>
-    <string name="classroom_start_date">Start Date</string>
-    <string name="classroom_schedule">Schedule</string>
-    <string name="format_example_title">Format Example:</string>
+    <string name="title_activity_classroom_registration">Tambah Kelas</string>
+    <string name="classroom_name">Nama</string>
+    <string name="classroom_end_date">Tgl Selesai</string>
+    <string name="classroom_start_date">Tgl Mulai</string>
+    <string name="classroom_schedule">Jadwal</string>
+    <string name="format_example_title">Contoh Format:</string>
     <string name="format_example_content1">TKTPL</string>
     <string name="format_example_content2">11-11-2020</string>
     <string name="format_example_content3">12-12-2020</string>
-    <string name="format_example_content4">Monday,09:00-Monday,10:00;Friday,11:00-Friday,12:00</string>
+    <string name="format_example_content4">Senin,09:00-Senin,10:00;Kamis,11:00-Kamis,12:00</string>
     <string name="create_classroom">Create Classroom</string>
 
-    <string name="hello">Hello,  </string>
+    <string name="hello">Halo,  </string>
     <string name="header_percentage">0%</string>
-    <string name="header_title_total">Your Total Class Attendance</string>
-    <string name="header_title_selected">Your Selected Class Attendance</string>
+    <string name="header_title_total">Total Kehadiran Kelas Kamu</string>
+    <string name="header_title_selected">Kehadiran Kamu Untuk Kelas Ini</string>
 
-    <string name="title_fragment_classroom_list">Classroom - All</string>
-    <string name="add_new_classroom">Add New Classroom</string>
-    <string name="present">present</string>
-    <string name="absent">absent</string>
-    <string name="not_started">not started</string>
+    <string name="title_fragment_classroom_list">Kelas - Semua</string>
+    <string name="add_new_classroom">Tambah Kelas</string>
+    <string name="present">hadir</string>
+    <string name="absent">absen</string>
+    <string name="not_started">blm mulai</string>
 
     <string name="title_fragment_classroom_info">Classroom - Info</string>
     <string name="attend_this_class">Attend</string>
