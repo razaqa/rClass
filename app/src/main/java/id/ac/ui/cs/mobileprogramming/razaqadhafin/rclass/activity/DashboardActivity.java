@@ -1,25 +1,31 @@
 package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
-import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.R;
-import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.Classroom;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.fragment.ClassroomInfoFragment;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.fragment.ClassroomListFragment;
-import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.ClassroomInfoViewModel;
-import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.ClassroomListViewModel;
+import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.receiver.BatteryBroadcastReceiver;
 
 public class DashboardActivity extends AppCompatActivity {
 
     protected ClassroomListFragment classroomListFragment;
     protected ClassroomInfoFragment classroomInfoFragment;
+    private BroadcastReceiver receiver;
+
+    @BindString(R.string.low_battery)
+    String lowBatteryTextTitle;
+
+    @BindString(R.string.low_battery_warning)
+    String lowBatteryWarningText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +33,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_dashboard);
         ButterKnife.bind(this);
+        receiver = new BatteryBroadcastReceiver(lowBatteryTextTitle, lowBatteryWarningText);
 
         if (savedInstanceState == null) {
             classroomListFragment = new ClassroomListFragment();
@@ -69,5 +76,17 @@ public class DashboardActivity extends AppCompatActivity {
         Intent intent = new Intent(DashboardActivity.this, DashboardActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onStart() {
+        registerReceiver(receiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(receiver);
+        super.onStop();
     }
 }

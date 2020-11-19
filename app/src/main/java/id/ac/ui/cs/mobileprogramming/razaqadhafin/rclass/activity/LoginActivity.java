@@ -3,7 +3,9 @@ package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,11 +17,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.R;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.User;
+import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.receiver.BatteryBroadcastReceiver;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel userViewModel;
+    private BroadcastReceiver receiver;
 
     @BindView(R.id.textViewHello)
     TextView textViewHello;
@@ -45,6 +49,12 @@ public class LoginActivity extends AppCompatActivity {
     @BindString(R.string.change_new_account)
     String changeNewAccountText;
 
+    @BindString(R.string.low_battery)
+    String lowBatteryTextTitle;
+
+    @BindString(R.string.low_battery_warning)
+    String lowBatteryWarningText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +63,8 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         userViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        receiver = new BatteryBroadcastReceiver(lowBatteryTextTitle, lowBatteryWarningText);
+
         setUpLayoutBasedOnUser();
     }
 
@@ -87,5 +99,16 @@ public class LoginActivity extends AppCompatActivity {
     protected void replaceAccount() {
         String name = editTextPersonName.getText().toString();
         userViewModel.replace(new User(name));
+    }
+    @Override
+    protected void onStart() {
+        registerReceiver(receiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(receiver);
+        super.onStop();
     }
 }
