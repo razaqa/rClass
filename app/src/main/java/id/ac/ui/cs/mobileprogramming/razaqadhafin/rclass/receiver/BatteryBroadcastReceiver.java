@@ -11,6 +11,8 @@ public class BatteryBroadcastReceiver extends BroadcastReceiver {
     private String lowBatteryTextTitle;
     private String lowBatteryWarningText;
 
+    public BatteryBroadcastReceiver() {}
+
     public BatteryBroadcastReceiver(String lowBatteryTextTitle, String lowBatteryWarningText) {
         this.lowBatteryTextTitle = lowBatteryTextTitle;
         this.lowBatteryWarningText = lowBatteryWarningText;
