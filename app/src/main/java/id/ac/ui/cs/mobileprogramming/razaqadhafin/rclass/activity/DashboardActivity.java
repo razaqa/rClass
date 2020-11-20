@@ -70,6 +70,10 @@ public class DashboardActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onButtonSyncClicked(View view) {
+        classroomInfoFragment.syncWithCalendar();
+    }
+
     @Override
     public void onBackPressed()
     {
