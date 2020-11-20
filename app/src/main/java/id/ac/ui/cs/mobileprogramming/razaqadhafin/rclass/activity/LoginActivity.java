@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.R;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.User;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.receiver.BatteryBroadcastReceiver;
+import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.service.NotificationService;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -66,6 +67,8 @@ public class LoginActivity extends AppCompatActivity {
         receiver = new BatteryBroadcastReceiver(lowBatteryTextTitle, lowBatteryWarningText);
 
         setUpLayoutBasedOnUser();
+        stopService(new Intent(LoginActivity.this, NotificationService.class));
+        startService(new Intent(LoginActivity.this, NotificationService.class));
     }
 
     public void setUpLayoutBasedOnUser() {

@@ -34,6 +34,10 @@ public class AttendanceRepository {
         });
     }
 
+    public List<Attendance> getAllAttendances() {
+        return attendanceDao.getAllAttendances();
+    }
+
     public LiveData<Attendance> getAttendanceById(int id) {
         BasicApp.getExecutors().diskIO().execute(() -> {
                 selectedAttendance = attendanceDao.getAttendanceById(id);
