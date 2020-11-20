@@ -55,6 +55,10 @@ public class ClassroomRepository {
         return allClassrooms;
     }
 
+    public Classroom getClassroomById(int id) {
+        return classroomDao.getClassroomById(id);
+    }
+
     public void insert(Classroom classroom) {
         BasicApp.getExecutors().diskIO().execute(() -> {
             BasicApp.getDatabase().runInTransaction(() -> {

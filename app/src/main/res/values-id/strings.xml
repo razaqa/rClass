@@ -48,6 +48,8 @@
     <string name="low_battery">Baterai Lemah</string>
     <string name="low_battery_warning">Baterai lemah. Jangan lupa laporkan presensi terlebih dulu sebelum lupa..</string>
     <string name="calendar_add_notification">Jadwal telah disimpan ke kalender</string>
+    <string name="notif_title">sedang berjalan</string>
+    <string name="notif_desc">Jangan lupa absen ya! :)</string>
 
     <!--
     This string is used for square devices and overridden by hello_world in

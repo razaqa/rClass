@@ -19,6 +19,9 @@ public interface AttendanceDao {
     @Query("SELECT * FROM attendances WHERE id = :id")
     LiveData<Attendance> getAttendanceById(int id);
 
+    @Query("SELECT * FROM attendances")
+    List<Attendance> getAllAttendances();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Attendance> attendances);
 

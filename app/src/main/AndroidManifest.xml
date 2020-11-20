@@ -12,6 +12,8 @@
         android:roundIcon="@mipmap/ic_razaaf_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RClass">
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_razaaf_transparent" />
         <activity android:name=".activity.DashboardActivity" />
         <activity android:name=".activity.ClassroomRegistrationActivity" />
 
@@ -24,13 +26,13 @@
         </activity>
 
         <receiver android:name=".receiver.BatteryBroadcastReceiver">
-
             <intent-filter>
                 <action android:name="android.intent.action.BATTERY_LOW">
                 </action>
             </intent-filter>
-
         </receiver>
+
+        <service android:name = ".service.NotificationService"/>
     </application>
 
 </manifest>

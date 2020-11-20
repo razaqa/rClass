@@ -23,6 +23,9 @@ public interface ClassroomDao {
     @Query("SELECT * FROM classrooms where name = :name LIMIT 1")
     LiveData<Classroom> getClassroomByName(String name);
 
+    @Query("SELECT * FROM classrooms where id = :id")
+    Classroom getClassroomById(int id);
+
     @Query("SELECT SUM(present_count) FROM classrooms")
     int getTotalPresentCount();
 
