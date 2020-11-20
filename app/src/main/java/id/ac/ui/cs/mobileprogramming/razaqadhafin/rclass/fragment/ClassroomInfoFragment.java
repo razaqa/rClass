@@ -1,13 +1,11 @@
 package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.fragment;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,9 +18,9 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.R;
-import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.activity.ClassroomRegistrationActivity;
-import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.activity.DashboardActivity;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.application.BasicApp;
+import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.contentprovider.CalendarContentProvider;
+import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.contentprovider.CalendarEvent;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.Attendance;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.Classroom;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.ClassroomInfoViewModel;
@@ -35,6 +33,7 @@ public class ClassroomInfoFragment extends Fragment {
     private ClassroomInfoViewModel classroomInfoViewModel;
     private DashboardViewModel dashboardViewModel;
     private Classroom selectedClass;
+    private Attendance selectedAttendance;
 
     @BindView(R.id.textViewHeaderUsername)
     TextView textViewHeaderUsername;
@@ -75,6 +74,9 @@ public class ClassroomInfoFragment extends Fragment {
     @BindString(R.string.not_started)
     String notStarted;
 
+    @BindString(R.string.calendar_add_notification)
+    String calendarAddNotification;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -100,6 +102,7 @@ public class ClassroomInfoFragment extends Fragment {
             dashboardViewModel.loadClassroomInfo(item);
             dashboardViewModel.getClassroomInfo().observe(getActivity(), classroom -> {
                 dashboardViewModel.loadAttendanceInfo(classroom.getLastAttendanceId());
+                selectedClass = classroom;
                 float presentCount = (float) classroom.getPresentCount();
                 float absentCount = (float) classroom.getAbsentCount();
                 float percentage = (presentCount * 100f) / (presentCount + absentCount);
@@ -112,6 +115,7 @@ public class ClassroomInfoFragment extends Fragment {
                 textViewHeaderPercentage.setText(String.format("%s%%", percentage).equals("NaN%") ? "0%" : String.format("%s%%", percentage));
 
                 dashboardViewModel.getAttendanceInfo().observe(getActivity(), attendance -> {
+                    selectedAttendance = attendance;
                     SimpleDateFormat formatter = new SimpleDateFormat("EEEE, dd MMMM HH:mm");
                     String startDate = formatter.format(attendance.getStartHour());
                     String endDate = formatter.format(attendance.getEndHour());
@@ -142,5 +146,22 @@ public class ClassroomInfoFragment extends Fragment {
             classroomInfoViewModel.absentClass(classroom.getLastAttendanceId(), classroom.getId());
             dashboardViewModel.getClassroomInfo().removeObservers(getActivity());
         });
+    }
+
+    public void syncWithCalendar() {
+        String LOCATION = "Faculty of Computer Science UI";
+        boolean IS_ALL_DAY = false;
+
+        CalendarContentProvider calendarProvider = new CalendarContentProvider(getActivity());
+        CalendarEvent event = new CalendarEvent(
+                selectedClass.getName(),
+                selectedClass.getName(),
+                selectedAttendance.getStartHour(),
+                selectedAttendance.getEndHour(),
+                LOCATION,
+                IS_ALL_DAY
+        );
+        calendarProvider.addEvent(event);
+        Toast.makeText(getActivity(), calendarAddNotification, Toast.LENGTH_SHORT).show();
     }
 }
