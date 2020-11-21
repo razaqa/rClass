@@ -5,8 +5,6 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import java.util.List;
-
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.application.BasicApp;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.User;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.repository.UserRepository;

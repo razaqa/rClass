@@ -2,6 +2,7 @@ package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,17 +16,15 @@ import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.fragment.ClassroomInfoF
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.fragment.ClassroomListFragment;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.receiver.BatteryBroadcastReceiver;
 
+@SuppressLint("NonConstantResourceId")
 public class DashboardActivity extends AppCompatActivity {
 
     protected ClassroomListFragment classroomListFragment;
     protected ClassroomInfoFragment classroomInfoFragment;
-    private BroadcastReceiver receiver;
+    private BroadcastReceiver broadcastReceiver;
 
-    @BindString(R.string.low_battery)
-    String lowBatteryTextTitle;
-
-    @BindString(R.string.low_battery_warning)
-    String lowBatteryWarningText;
+    @BindString(R.string.low_battery) String lowBatteryTextTitle;
+    @BindString(R.string.low_battery_warning) String lowBatteryWarningText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_dashboard);
         ButterKnife.bind(this);
-        receiver = new BatteryBroadcastReceiver(lowBatteryTextTitle, lowBatteryWarningText);
+        broadcastReceiver = new BatteryBroadcastReceiver(lowBatteryTextTitle, lowBatteryWarningText);
 
         if (savedInstanceState == null) {
             classroomListFragment = new ClassroomListFragment();
@@ -84,13 +83,13 @@ public class DashboardActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        registerReceiver(receiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
+        registerReceiver(broadcastReceiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        unregisterReceiver(receiver);
+        unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

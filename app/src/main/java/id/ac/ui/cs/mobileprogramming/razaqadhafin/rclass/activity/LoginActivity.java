@@ -3,6 +3,7 @@ package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -21,40 +22,23 @@ import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.receiver.BatteryBroadca
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.service.NotificationService;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.LoginViewModel;
 
+@SuppressLint("NonConstantResourceId")
 public class LoginActivity extends AppCompatActivity {
 
-    private LoginViewModel userViewModel;
-    private BroadcastReceiver receiver;
+    private LoginViewModel loginViewModel;
+    private BroadcastReceiver broadcastReceiver;
 
-    @BindView(R.id.textViewHello)
-    TextView textViewHello;
+    @BindView(R.id.textViewHello) TextView textViewHello;
+    @BindView(R.id.editTextPersonName) EditText editTextPersonName;
+    @BindView(R.id.buttonCreateAccount) Button buttonCreateAccount;
+    @BindView(R.id.buttonLogin) Button buttonLogin;
 
-    @BindView(R.id.editTextPersonName)
-    EditText editTextPersonName;
-
-    @BindView(R.id.buttonCreateAccount)
-    Button buttonCreateAccount;
-
-    @BindView(R.id.buttonLogin)
-    Button buttonLogin;
-
-    @BindString(R.string.greeting)
-    String greetingText;
-
-    @BindString(R.string.welcome_back)
-    String welcomeBackText;
-
-    @BindString(R.string.create_new_account)
-    String createNewAccountText;
-
-    @BindString(R.string.change_new_account)
-    String changeNewAccountText;
-
-    @BindString(R.string.low_battery)
-    String lowBatteryTextTitle;
-
-    @BindString(R.string.low_battery_warning)
-    String lowBatteryWarningText;
+    @BindString(R.string.greeting) String greetingText;
+    @BindString(R.string.welcome_back) String welcomeBackText;
+    @BindString(R.string.create_new_account) String createNewAccountText;
+    @BindString(R.string.change_new_account) String changeNewAccountText;
+    @BindString(R.string.low_battery) String lowBatteryTextTitle;
+    @BindString(R.string.low_battery_warning) String lowBatteryWarningText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +47,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        userViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        receiver = new BatteryBroadcastReceiver(lowBatteryTextTitle, lowBatteryWarningText);
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        broadcastReceiver = new BatteryBroadcastReceiver(lowBatteryTextTitle, lowBatteryWarningText);
 
         setUpLayoutBasedOnUser();
         stopService(new Intent(LoginActivity.this, NotificationService.class));
@@ -72,9 +56,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void setUpLayoutBasedOnUser() {
-        userViewModel.getUserCount().observe(this, count -> {
+        loginViewModel.getUserCount().observe(this, count -> {
             if(count != 0) {
-                userViewModel.getCurrentUser().observe(this, user -> {
+                loginViewModel.getCurrentUser().observe(this, user -> {
                     textViewHello.setText(String.format("%s, %s!", welcomeBackText, user.getName()));
                     editTextPersonName.setText(user.getName());
                 });
@@ -101,17 +85,17 @@ public class LoginActivity extends AppCompatActivity {
 
     protected void replaceAccount() {
         String name = editTextPersonName.getText().toString();
-        userViewModel.replace(new User(name));
+        loginViewModel.replace(new User(name));
     }
     @Override
     protected void onStart() {
-        registerReceiver(receiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
+        registerReceiver(broadcastReceiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        unregisterReceiver(receiver);
+        unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

@@ -40,7 +40,7 @@ public class AttendanceRepository {
 
     public LiveData<Attendance> getAttendanceById(int id) {
         BasicApp.getExecutors().diskIO().execute(() -> {
-                selectedAttendance = attendanceDao.getAttendanceById(id);
+            selectedAttendance = attendanceDao.getAttendanceById(id);
         });
         return selectedAttendance;
     }

@@ -1,7 +1,6 @@
 package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.fragment;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,24 +13,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.R;
-import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.activity.ClassroomRegistrationActivity;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.activity.DashboardActivity;
-import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.activity.LoginActivity;
-import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.application.BasicApp;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.Classroom;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.ClassroomListViewModel;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.DashboardViewModel;
 
+@SuppressLint("NonConstantResourceId")
 public class ClassroomListFragment extends Fragment  {
 
     public static final String CLASS_NAME = "ClassroomListFragment";
@@ -39,14 +35,11 @@ public class ClassroomListFragment extends Fragment  {
     private ClassroomListViewModel classroomListViewModel;
     private DashboardViewModel dashboardViewModel;
 
-    @BindView(R.id.textViewHeaderUsername)
-    TextView textViewHeaderUsername;
+    private final HashMap<String, Integer> classNamesAndLastAttendanceIds = new HashMap<>();
 
-    @BindView(R.id.textViewHeaderPercentage)
-    TextView textViewHeaderPercentage;
-
-    @BindView(R.id.listViewClassroomAll)
-    ListView listViewClassroomAll;
+    @BindView(R.id.textViewHeaderUsername) TextView textViewHeaderUsername;
+    @BindView(R.id.textViewHeaderPercentage) TextView textViewHeaderPercentage;
+    @BindView(R.id.listViewClassroomAll) ListView listViewClassroomAll;
 
     @Nullable
     @Override
@@ -58,7 +51,7 @@ public class ClassroomListFragment extends Fragment  {
         ButterKnife.bind(this, view);
 
         classroomListViewModel = new ViewModelProvider(requireActivity()).get(ClassroomListViewModel.class);
-        dashboardViewModel = DashboardViewModel.getInstance(BasicApp.getInstance());
+        dashboardViewModel = new ViewModelProvider(requireActivity()).get(DashboardViewModel.class);
 
         setUpHeader();
         setUpList();
@@ -67,39 +60,46 @@ public class ClassroomListFragment extends Fragment  {
     }
 
     protected void setUpHeader() {
-        classroomListViewModel.getCurrentUser().observe(getActivity(), user -> {
-            textViewHeaderUsername.setText(user.getName());
-        });
-        String percentage = String.valueOf(classroomListViewModel.getHeaderPercentage());
-        percentage = String.format("%s%%", percentage);
-        percentage = percentage.equalsIgnoreCase("nan%") ? "0%" : percentage;
+        dashboardViewModel.getCurrentUser().observe(Objects.requireNonNull(getActivity()),
+                user -> textViewHeaderUsername.setText(String.format(" %s", user.getName())));
+
+        String percentage = dashboardViewModel.getHeaderPercentage();
         textViewHeaderPercentage.setText(percentage);
     }
 
     protected void setUpList() {
-        classroomListViewModel.getClassrooms().observe(getActivity(), classrooms -> {
+        classroomListViewModel.getClassrooms().observe(Objects.requireNonNull(getActivity()), classrooms -> {
 
             listViewClassroomAll.setAdapter(
                     new ArrayAdapter<>(
                             getActivity(),
                             android.R.layout.simple_list_item_1,
                             classrooms.stream()
-                                    .map(x -> x.getLastAttendanceId() + "," + x.getName())
+                                    .map(Classroom::getName)
                                     .collect(Collectors.toList())
                     )
             );
 
+            classrooms.forEach(x -> {
+                classNamesAndLastAttendanceIds.put(
+                    x.getName(), x.getLastAttendanceId());
+                    Log.d(x.getName(), Integer.toString(x.getLastAttendanceId()));
+            });
+
             listViewClassroomAll.setOnItemClickListener((parent, itemView, position, id) -> {
                 TextView textView = (TextView) itemView;
-                int lastAttendanceId = Integer.parseInt(textView.getText().toString().split(",")[0]);
-                String classStr = textView.getText().toString().split(",")[1];
-                textView.setText(classStr);
+                String classStr = textView.getText().toString();
                 dashboardViewModel.selectClassroom(classStr);
                 dashboardViewModel.loadClassroomInfo(classStr);
-                dashboardViewModel.loadAttendanceInfo(lastAttendanceId);
+                dashboardViewModel.loadAttendanceInfo(getLastAttendanceId(classStr));
+
                 ((DashboardActivity) requireActivity()).showClassroomInfoFragment();
             });
         });
 
+    }
+
+    private int getLastAttendanceId(String className) {
+        return Objects.requireNonNull(this.classNamesAndLastAttendanceIds.get(className));
     }
 }

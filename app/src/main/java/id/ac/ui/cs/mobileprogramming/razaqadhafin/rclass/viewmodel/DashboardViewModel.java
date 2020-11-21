@@ -48,10 +48,18 @@ public class DashboardViewModel extends AndroidViewModel {
         return currentUser;
     }
 
-    public float getHeaderPercentage() {
-        int present = classroomRepository.getTotalPresentCount();
-        int absent = classroomRepository.getTotalAbsentCount();
-        return ((float) present * 100f) / (float) (present + absent);
+    public String getHeaderPercentage() {
+        float presentCount = (float) classroomRepository.getTotalPresentCount();
+        float absentCount = (float) classroomRepository.getTotalAbsentCount();
+
+        float denominator = presentCount + absentCount;
+
+        if (denominator == 0) {
+            return "0%";
+        }
+
+        float percentage = (presentCount * 100f) / denominator;
+        return percentage + "%";
     }
 
     public LiveData<String> getSelectedClassroom() {
@@ -77,4 +85,10 @@ public class DashboardViewModel extends AndroidViewModel {
     public LiveData<Attendance> getAttendanceInfo() {
         return attendance;
     }
+
+    public LiveData<Attendance> getAttendanceInfo(int id) {
+        attendance = attendanceRepository.getAttendanceById(id);
+        return attendance;
+    }
+
 }

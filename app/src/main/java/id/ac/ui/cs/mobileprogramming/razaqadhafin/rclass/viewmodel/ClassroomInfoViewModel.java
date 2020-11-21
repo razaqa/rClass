@@ -2,6 +2,7 @@ package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel;
 
 import android.app.Application;
 
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -11,12 +12,15 @@ import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.application.BasicApp;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.Attendance;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.Classroom;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.repository.AttendanceRepository;
+import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.repository.ClassroomRepository;
+import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.repository.UserRepository;
 
-public class ClassroomInfoViewModel extends DashboardViewModel {
+public class ClassroomInfoViewModel extends AndroidViewModel {
 
     private static ClassroomInfoViewModel instance;
 
     private AttendanceRepository attendanceRepository;
+    protected ClassroomRepository classroomRepository;
 
     public static ClassroomInfoViewModel getInstance(Application application) {
         if (instance == null) {
@@ -28,6 +32,7 @@ public class ClassroomInfoViewModel extends DashboardViewModel {
     public ClassroomInfoViewModel(Application application) {
         super(application);
         attendanceRepository = BasicApp.getAttendanceRepository();
+        classroomRepository = BasicApp.getClassroomRepository();
     }
 
     public void attendClass(int attandanceId, int classId) {

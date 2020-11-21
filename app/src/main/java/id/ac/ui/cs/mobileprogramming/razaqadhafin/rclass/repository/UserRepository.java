@@ -4,8 +4,6 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import java.util.List;
-
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.application.BasicApp;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.dao.UserDao;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.database.AppDatabase;
@@ -29,36 +27,39 @@ public class UserRepository {
         AppDatabase db = AppDatabase.getInstance(application);
         userDao = db.userDao();
         BasicApp.getExecutors().diskIO().execute(() -> {
-                userCount = userDao.getUsersCount();
+            userCount = userDao.getUsersCount();
         });
         BasicApp.getExecutors().diskIO().execute(() -> {
-                currentUser = userDao.getSomeUsers(1);
+            currentUser = userDao.getSomeUsers(1);
         });
     }
 
     public LiveData<User> getCurrentUser() {
         BasicApp.getExecutors().diskIO().execute(() -> {
-                currentUser = userDao.getSomeUsers(1);
+            currentUser = userDao.getSomeUsers(1);
         });
         return currentUser;
     }
 
     public LiveData<Integer> getUserCount() {
         BasicApp.getExecutors().diskIO().execute(() -> {
-                userCount = userDao.getUsersCount();
+            userCount = userDao.getUsersCount();
         });
         return userCount;
     }
 
     public void insert(User user) {
         BasicApp.getExecutors().diskIO().execute(() -> {
-                userDao.insert(user);
+            userDao.insert(user);
         });
     }
 
     public void deleteAll() {
         BasicApp.getExecutors().diskIO().execute(() -> {
+            BasicApp.getDatabase().runInTransaction(() -> {
                 userDao.deleteAll();
+            });
         });
     }
+
 }
