@@ -35,26 +35,26 @@ public class ClassroomInfoViewModel extends AndroidViewModel {
         classroomRepository = BasicApp.getClassroomRepository();
     }
 
-    public void attendClass(int attandanceId, int classId) {
+    public void attendClass(int attendanceId, int presentCount, int classId) {
         attendanceRepository.updateToPresent(classId);
-        classroomRepository.addPresentCount(classId);
-        classroomRepository.updateLastAttendanceId(attandanceId + 1, classId);
+        classroomRepository.addPresentCount(presentCount, classId);
+        classroomRepository.updateLastAttendanceId(attendanceId + 1, classId);
         int maxId = attendanceRepository.getMaxId();
-        if (maxId == attandanceId) {
-            classroomRepository.updateLastAttendanceId(attandanceId, classId);
+        if (maxId == attendanceId) {
+            classroomRepository.updateLastAttendanceId(attendanceId, classId);
         } else {
-            classroomRepository.updateLastAttendanceId(attandanceId + 1, classId);
+            classroomRepository.updateLastAttendanceId(attendanceId + 1, classId);
         }
     }
 
-    public void absentClass(int attandanceId, int classId) {
+    public void absentClass(int attendanceId, int absentCount, int classId) {
         attendanceRepository.updateToAbsent(classId);
-        classroomRepository.addAbsentCount(classId);
+        classroomRepository.addAbsentCount(absentCount, classId);
         int maxId = attendanceRepository.getMaxId();
-        if (maxId == attandanceId) {
-            classroomRepository.updateLastAttendanceId(attandanceId, classId);
+        if (maxId == attendanceId) {
+            classroomRepository.updateLastAttendanceId(attendanceId, classId);
         } else {
-            classroomRepository.updateLastAttendanceId(attandanceId + 1, classId);
+            classroomRepository.updateLastAttendanceId(attendanceId + 1, classId);
         }
     }
 }

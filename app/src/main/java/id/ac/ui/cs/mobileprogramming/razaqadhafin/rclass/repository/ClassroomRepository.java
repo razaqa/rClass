@@ -139,18 +139,18 @@ public class ClassroomRepository {
         return absentCount;
     }
 
-    public void addPresentCount(int id) {
+    public void addPresentCount(int presentNo, int id) {
         BasicApp.getExecutors().diskIO().execute(() -> {
             BasicApp.getDatabase().runInTransaction(() -> {
-                classroomDao.updatePresentCount(getTotalPresentCount() + 1, id);
+                classroomDao.updatePresentCount(presentNo + 1, id);
             });
         });
     }
 
-    public void addAbsentCount(int id) {
+    public void addAbsentCount(int absentNo, int id) {
         BasicApp.getExecutors().diskIO().execute(() -> {
             BasicApp.getDatabase().runInTransaction(() -> {
-                classroomDao.updateAbsentCount(getTotalAbsentCount() + 1, id);
+                classroomDao.updateAbsentCount(absentNo + 1, id);
             });
         });
     }

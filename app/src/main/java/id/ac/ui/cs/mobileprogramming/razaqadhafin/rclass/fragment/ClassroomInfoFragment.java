@@ -184,11 +184,17 @@ public class ClassroomInfoFragment extends Fragment {
     }
 
     public void attendClick() {
-        classroomInfoViewModel.attendClass(selectedClass.getLastAttendanceId(), selectedClass.getId());
+        classroomInfoViewModel.attendClass(
+                selectedClass.getLastAttendanceId(),
+                selectedClass.getPresentCount(),
+                selectedClass.getId());
     }
 
     public void absentClick() {
-        classroomInfoViewModel.absentClass(selectedClass.getLastAttendanceId(), selectedClass.getId());
+        classroomInfoViewModel.absentClass(
+                selectedClass.getLastAttendanceId(),
+                selectedClass.getAbsentCount(),
+                selectedClass.getId());
     }
 
     public void syncWithCalendar() {
