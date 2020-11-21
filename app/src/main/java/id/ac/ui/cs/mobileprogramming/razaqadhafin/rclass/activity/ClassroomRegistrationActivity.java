@@ -1,5 +1,6 @@
 package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.activity;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -24,8 +25,9 @@ import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.ClassroomRegi
 
 public class ClassroomRegistrationActivity extends AppCompatActivity {
 
+    private static final String DATE_FORMAT = "dd-MM-yyyy";
     private ClassroomRegistrationViewModel classroomRegistrationViewModel;
-    private BroadcastReceiver receiver;
+    private BroadcastReceiver broadcastReceiver;
 
     @BindView(R.id.editTextClassroomName)
     EditText editTextClassroomName;
@@ -52,8 +54,9 @@ public class ClassroomRegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_classroom_registration);
         ButterKnife.bind(this);
 
-        classroomRegistrationViewModel = new ViewModelProvider(this).get(ClassroomRegistrationViewModel.class);
-        receiver = new BatteryBroadcastReceiver(lowBatteryTextTitle, lowBatteryWarningText);
+        classroomRegistrationViewModel = new ViewModelProvider(this)
+                .get(ClassroomRegistrationViewModel.class);
+        broadcastReceiver = new BatteryBroadcastReceiver(lowBatteryTextTitle, lowBatteryWarningText);
     }
 
     public void onButtonCreateClassroomClicked(View view) {
@@ -68,12 +71,17 @@ public class ClassroomRegistrationActivity extends AppCompatActivity {
         String endDateStr = editTextClassroomEndDate.getText().toString();
         String scheduleStr = editTextClassroomSchedule.getText().toString();
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
         Date startDate, endDate;
+
         try {
             startDate = formatter.parse(startDateStr);
             endDate = formatter.parse(endDateStr);
-            classroomRegistrationViewModel.insert(new Classroom(nameStr, startDate, endDate, scheduleStr));
+
+            Classroom classroom = new Classroom(nameStr, startDate, endDate, scheduleStr);
+            classroomRegistrationViewModel.insert(classroom);
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -82,20 +90,20 @@ public class ClassroomRegistrationActivity extends AppCompatActivity {
     @Override
     public void onBackPressed()
     {
-        Intent moveback = new Intent(ClassroomRegistrationActivity.this, DashboardActivity.class);
-        startActivity(moveback);
+        Intent intent = new Intent(ClassroomRegistrationActivity.this, DashboardActivity.class);
+        startActivity(intent);
         finish();
     }
 
     @Override
     protected void onStart() {
-        registerReceiver(receiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
+        registerReceiver(broadcastReceiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        unregisterReceiver(receiver);
+        unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

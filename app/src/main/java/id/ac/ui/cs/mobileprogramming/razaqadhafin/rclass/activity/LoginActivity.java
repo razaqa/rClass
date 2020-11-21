@@ -1,16 +1,21 @@
 package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -21,40 +26,26 @@ import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.receiver.BatteryBroadca
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.service.NotificationService;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.LoginViewModel;
 
+@SuppressLint("NonConstantResourceId")
 public class LoginActivity extends AppCompatActivity {
 
-    private LoginViewModel userViewModel;
-    private BroadcastReceiver receiver;
+    private static final int PERMISSION_CODE = 1;
 
-    @BindView(R.id.textViewHello)
-    TextView textViewHello;
+    private LoginViewModel loginViewModel;
+    private BroadcastReceiver broadcastReceiver;
 
-    @BindView(R.id.editTextPersonName)
-    EditText editTextPersonName;
+    @BindView(R.id.textViewHello) TextView textViewHello;
+    @BindView(R.id.editTextPersonName) EditText editTextPersonName;
+    @BindView(R.id.buttonCreateAccount) Button buttonCreateAccount;
+    @BindView(R.id.buttonLogin) Button buttonLogin;
 
-    @BindView(R.id.buttonCreateAccount)
-    Button buttonCreateAccount;
-
-    @BindView(R.id.buttonLogin)
-    Button buttonLogin;
-
-    @BindString(R.string.greeting)
-    String greetingText;
-
-    @BindString(R.string.welcome_back)
-    String welcomeBackText;
-
-    @BindString(R.string.create_new_account)
-    String createNewAccountText;
-
-    @BindString(R.string.change_new_account)
-    String changeNewAccountText;
-
-    @BindString(R.string.low_battery)
-    String lowBatteryTextTitle;
-
-    @BindString(R.string.low_battery_warning)
-    String lowBatteryWarningText;
+    @BindString(R.string.greeting) String greetingText;
+    @BindString(R.string.welcome_back) String welcomeBackText;
+    @BindString(R.string.create_new_account) String createNewAccountText;
+    @BindString(R.string.change_new_account) String changeNewAccountText;
+    @BindString(R.string.low_battery) String lowBatteryTextTitle;
+    @BindString(R.string.low_battery_warning) String lowBatteryWarningText;
+    @BindString(R.string.request_permission) String requestPermissionText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,18 +54,20 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        userViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        receiver = new BatteryBroadcastReceiver(lowBatteryTextTitle, lowBatteryWarningText);
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        broadcastReceiver = new BatteryBroadcastReceiver(lowBatteryTextTitle, lowBatteryWarningText);
 
         setUpLayoutBasedOnUser();
         stopService(new Intent(LoginActivity.this, NotificationService.class));
         startService(new Intent(LoginActivity.this, NotificationService.class));
+
+        checkPermission();
     }
 
-    public void setUpLayoutBasedOnUser() {
-        userViewModel.getUserCount().observe(this, count -> {
+    protected void setUpLayoutBasedOnUser() {
+        loginViewModel.getUserCount().observe(this, count -> {
             if(count != 0) {
-                userViewModel.getCurrentUser().observe(this, user -> {
+                loginViewModel.getCurrentUser().observe(this, user -> {
                     textViewHello.setText(String.format("%s, %s!", welcomeBackText, user.getName()));
                     editTextPersonName.setText(user.getName());
                 });
@@ -86,6 +79,17 @@ public class LoginActivity extends AppCompatActivity {
                 buttonLogin.setEnabled(false);
             }
         });
+    }
+
+    protected void checkPermission() {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(getApplicationContext(),
+                    Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                    new String[] { Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR }, PERMISSION_CODE);
+        }
     }
 
     public void onButtonLoginClicked(View view) {
@@ -101,17 +105,28 @@ public class LoginActivity extends AppCompatActivity {
 
     protected void replaceAccount() {
         String name = editTextPersonName.getText().toString();
-        userViewModel.replace(new User(name));
+        loginViewModel.replace(new User(name));
     }
     @Override
     protected void onStart() {
-        registerReceiver(receiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
+        registerReceiver(broadcastReceiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        unregisterReceiver(receiver);
+        unregisterReceiver(broadcastReceiver);
         super.onStop();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        if (requestCode == PERMISSION_CODE) {
+            if (!(grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Toast.makeText(this, requestPermissionText, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

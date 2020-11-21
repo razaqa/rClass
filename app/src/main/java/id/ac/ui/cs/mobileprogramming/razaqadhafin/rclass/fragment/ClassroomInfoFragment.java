@@ -1,5 +1,6 @@
 package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,15 +11,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Objects;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.R;
-import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.application.BasicApp;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.contentprovider.CalendarContentProvider;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.contentprovider.CalendarEvent;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.Attendance;
@@ -26,56 +29,100 @@ import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.Classroom;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.ClassroomInfoViewModel;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.DashboardViewModel;
 
+@SuppressLint("NonConstantResourceId")
 public class ClassroomInfoFragment extends Fragment {
 
     public static final String CLASS_NAME = "ClassroomInfoFragment";
 
     private ClassroomInfoViewModel classroomInfoViewModel;
     private DashboardViewModel dashboardViewModel;
+
     private Classroom selectedClass;
     private Attendance selectedAttendance;
 
-    @BindView(R.id.textViewHeaderUsername)
-    TextView textViewHeaderUsername;
+    class DataAdapter {
+        String className;
+        String classStartHour;
+        String classEndHour;
+        String classPresentCount;
+        String classAbsentCount;
+        String classPercentage;
+        String classSchedule;
+        String classTodayStatus;
 
-    @BindView(R.id.textViewHeaderPercentage)
-    TextView textViewHeaderPercentage;
+        DataAdapter(String className,
+                 Date classStartHour,
+                 Date classEndHour,
+                 int classPresentCount,
+                 int classAbsentCount,
+                 int classTodayStatus,
+                 String classSchedule) {
+            this.className = removeNullString(className);
+            this.classStartHour = dateToString(classStartHour);
+            this.classEndHour = dateToString(classEndHour);
+            this.classPresentCount = Integer.toString(classPresentCount);
+            this.classAbsentCount = Integer.toString(classAbsentCount);
+            this.classPercentage = numbersToPercentage(classPresentCount, classAbsentCount);
+            this.classTodayStatus = parseIntToStringStatus(classTodayStatus);
+            this.classSchedule = removeNullString(classSchedule);
+        }
 
-    @BindView(R.id.textViewValueName)
-    TextView textViewValueName;
+        String dateToString(Date date) {
+            if (date != null) {
+                @SuppressLint("SimpleDateFormat")
+                SimpleDateFormat df = new SimpleDateFormat("EEEE, dd MMMM HH:mm");
+                return df.format(date);
+            }
+            return "-";
+        }
 
-    @BindView(R.id.textViewValueStartDate)
-    TextView textViewValueStartDate;
+        String numbersToPercentage(int x, int y) {
+            float numerator = (float) x;
+            float denominator = (float) x + (float) y;
+            if (denominator == 0) {
+                return "0%";
+            }
+            float percentage = (numerator * 100f) / (denominator);
+            return percentage + "%";
+        }
 
-    @BindView(R.id.textViewValueEndDate)
-    TextView textViewValueEndDate;
+        String parseIntToStringStatus(int status) {
+            String statusStr;
+            switch (status) {
+                case 1:
+                    statusStr = present;
+                    break;
+                case -1:
+                    statusStr = absent;
+                    break;
+                case 0:
+                default:
+                    statusStr = notStarted;
+            }
+            return statusStr;
+        }
 
-    @BindView(R.id.textViewValuePresent)
-    TextView textViewValuePresent;
+        String removeNullString(String text) {
+            return text == null ? "-" : text;
+        }
 
-    @BindView(R.id.textViewValueAbsent)
-    TextView textViewValueAbsent;
+    }
 
-    @BindView(R.id.textViewValuePercentage)
-    TextView textViewValuePercentage;
+    @BindView(R.id.textViewHeaderUsername) TextView textViewHeaderUsername;
+    @BindView(R.id.textViewHeaderPercentage) TextView textViewHeaderPercentage;
+    @BindView(R.id.textViewValueName) TextView textViewValueName;
+    @BindView(R.id.textViewValueStartDate) TextView textViewValueStartDate;
+    @BindView(R.id.textViewValueEndDate) TextView textViewValueEndDate;
+    @BindView(R.id.textViewValuePresent) TextView textViewValuePresent;
+    @BindView(R.id.textViewValueAbsent) TextView textViewValueAbsent;
+    @BindView(R.id.textViewValuePercentage) TextView textViewValuePercentage;
+    @BindView(R.id.textViewValueToday) TextView textViewValueToday;
+    @BindView(R.id.textViewValueSchedule) TextView textViewValueSchedule;
 
-    @BindView(R.id.textViewValueToday)
-    TextView textViewValueToday;
-
-    @BindView(R.id.textViewValueSchedule)
-    TextView textViewValueSchedule;
-
-    @BindString(R.string.present)
-    String present;
-
-    @BindString(R.string.absent)
-    String absent;
-
-    @BindString(R.string.not_started)
-    String notStarted;
-
-    @BindString(R.string.calendar_add_notification)
-    String calendarAddNotification;
+    @BindString(R.string.present) String present;
+    @BindString(R.string.absent) String absent;
+    @BindString(R.string.not_started) String notStarted;
+    @BindString(R.string.calendar_add_notification) String calendarAddNotification;
 
     @Nullable
     @Override
@@ -87,81 +134,82 @@ public class ClassroomInfoFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         classroomInfoViewModel = new ViewModelProvider(requireActivity()).get(ClassroomInfoViewModel.class);
-        dashboardViewModel = DashboardViewModel.getInstance(BasicApp.getInstance());
+        dashboardViewModel = new ViewModelProvider(requireActivity()).get(DashboardViewModel.class);
 
+        setUpHeader();
         setUpContent();
 
         return view;
     }
 
+    protected void setUpHeader() {
+        dashboardViewModel.getCurrentUser().observe(Objects.requireNonNull(getActivity()),
+                user -> textViewHeaderUsername.setText(String.format(" %s", user.getName())));
+    }
+
     protected void setUpContent() {
-        classroomInfoViewModel.getCurrentUser().observe(getActivity(), user -> {
-            textViewHeaderUsername.setText(user.getName());
-        });
-        dashboardViewModel.getSelectedClassroom().observe(getActivity(), item -> {
-            dashboardViewModel.loadClassroomInfo(item);
-            dashboardViewModel.getClassroomInfo().observe(getActivity(), classroom -> {
-                dashboardViewModel.loadAttendanceInfo(classroom.getLastAttendanceId());
+        dashboardViewModel.getSelectedClassroom().observe(Objects.requireNonNull(getActivity()),
+                classStr -> dashboardViewModel.loadClassroomInfo(classStr));
+
+        Transformations.switchMap(dashboardViewModel.getClassroomInfo(), (classroom) -> {
                 selectedClass = classroom;
-                float presentCount = (float) classroom.getPresentCount();
-                float absentCount = (float) classroom.getAbsentCount();
-                float percentage = (presentCount * 100f) / (presentCount + absentCount);
-
-                textViewValueName.setText(classroom.getName());
-                textViewValuePresent.setText(String.format("%s", classroom.getPresentCount()));
-                textViewValueAbsent.setText(String.format("%s", classroom.getAbsentCount()));
-                textViewValuePercentage.setText(String.format("%s%%", percentage).equals("NaN%") ? "0%" : String.format("%s%%", percentage));
-                textViewValueSchedule.setText(classroom.getSchedule());
-                textViewHeaderPercentage.setText(String.format("%s%%", percentage).equals("NaN%") ? "0%" : String.format("%s%%", percentage));
-
-                dashboardViewModel.getAttendanceInfo().observe(getActivity(), attendance -> {
+                return dashboardViewModel.getAttendanceInfo(classroom.getId());
+            }).observe(getActivity(), attendance -> {
                     selectedAttendance = attendance;
-                    SimpleDateFormat formatter = new SimpleDateFormat("EEEE, dd MMMM HH:mm");
-                    String startDate = formatter.format(attendance.getStartHour());
-                    String endDate = formatter.format(attendance.getEndHour());
 
-                    String status = notStarted;
-                    if (attendance.getIsPresent() != 0) {
-                        status = attendance.getIsPresent() == 1 ? present : absent;
-                    }
-
-                    textViewValueStartDate.setText(startDate);
-                    textViewValueEndDate.setText(endDate);
-                    textViewValueToday.setText(status);
-
-                });
+                    DataAdapter data = new DataAdapter(
+                            selectedClass.getName(),
+                            selectedAttendance.getStartHour(),
+                            selectedAttendance.getEndHour(),
+                            selectedClass.getPresentCount(),
+                            selectedClass.getAbsentCount(),
+                            selectedAttendance.getIsPresent(),
+                            selectedClass.getSchedule()
+                    );
+                    setView(data);
             });
-        });
+    }
+
+    protected void setView(DataAdapter pageInfo) {
+        textViewValueName.setText(pageInfo.className);
+        textViewValueStartDate.setText(pageInfo.classStartHour);
+        textViewValueEndDate.setText(pageInfo.classEndHour);
+        textViewValuePresent.setText(pageInfo.classPresentCount);
+        textViewValueAbsent.setText(pageInfo.classAbsentCount);
+        textViewValuePercentage.setText(pageInfo.classPercentage);
+        textViewValueToday.setText(pageInfo.classTodayStatus);
+        textViewValueSchedule.setText(pageInfo.classSchedule);
+
+        textViewHeaderPercentage.setText(pageInfo.classPercentage);
     }
 
     public void attendClick() {
-        dashboardViewModel.getClassroomInfo().observe(getActivity(), classroom -> {
-            classroomInfoViewModel.attendClass(classroom.getLastAttendanceId(), classroom.getId());
-            dashboardViewModel.getClassroomInfo().removeObservers(getActivity());
-        });
+        classroomInfoViewModel.attendClass(
+                selectedClass.getLastAttendanceId(),
+                selectedClass.getPresentCount(),
+                selectedClass.getId());
     }
 
     public void absentClick() {
-        dashboardViewModel.getClassroomInfo().observe(getActivity(), classroom -> {
-            classroomInfoViewModel.absentClass(classroom.getLastAttendanceId(), classroom.getId());
-            dashboardViewModel.getClassroomInfo().removeObservers(getActivity());
-        });
+        classroomInfoViewModel.absentClass(
+                selectedClass.getLastAttendanceId(),
+                selectedClass.getAbsentCount(),
+                selectedClass.getId());
     }
 
     public void syncWithCalendar() {
         String LOCATION = "Faculty of Computer Science UI";
-        boolean IS_ALL_DAY = false;
 
-        CalendarContentProvider calendarProvider = new CalendarContentProvider(getActivity());
+        CalendarContentProvider provider = new CalendarContentProvider(Objects.requireNonNull(getActivity()));
         CalendarEvent event = new CalendarEvent(
                 selectedClass.getName(),
                 selectedClass.getName(),
                 selectedAttendance.getStartHour(),
                 selectedAttendance.getEndHour(),
                 LOCATION,
-                IS_ALL_DAY
+                false
         );
-        calendarProvider.addEvent(event);
+        provider.addEvent(event);
         Toast.makeText(getActivity(), calendarAddNotification, Toast.LENGTH_SHORT).show();
     }
 }

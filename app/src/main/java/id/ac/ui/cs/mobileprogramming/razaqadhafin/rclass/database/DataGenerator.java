@@ -1,16 +1,11 @@
 package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.database;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.User;
 
-/**
- * Generates data to pre-populate the database
- */
 public class DataGenerator {
 
     private static final String[] FIRST = new String[]{};

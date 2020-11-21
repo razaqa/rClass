@@ -1,7 +1,6 @@
 package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.database;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;

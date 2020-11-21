@@ -1,9 +1,9 @@
 package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.repository;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,7 +50,7 @@ public class ClassroomRepository {
 
     public LiveData<List<Classroom>> getAllClassrooms() {
         BasicApp.getExecutors().diskIO().execute(() -> {
-                allClassrooms = classroomDao.getAllClassrooms();
+            allClassrooms = classroomDao.getAllClassrooms();
         });
         return allClassrooms;
     }
@@ -59,6 +59,7 @@ public class ClassroomRepository {
         return classroomDao.getClassroomById(id);
     }
 
+    @SuppressLint("SimpleDateFormat")
     public void insert(Classroom classroom) {
         BasicApp.getExecutors().diskIO().execute(() -> {
             BasicApp.getDatabase().runInTransaction(() -> {
@@ -97,8 +98,9 @@ public class ClassroomRepository {
                             String endDateFinal = endDateStr + " " + endHour;
 
                             try {
-                                Date startDate = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(startDateFinal);
-                                Date endDate = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(endDateFinal);
+                                String format = "dd/MM/yyyy HH:mm";
+                                Date startDate = new SimpleDateFormat(format).parse(startDateFinal);
+                                Date endDate = new SimpleDateFormat(format).parse(endDateFinal);
 
                                 Attendance attendance = new Attendance(startDate, endDate);
                                 attendance.setClass_id(classId);
@@ -118,37 +120,37 @@ public class ClassroomRepository {
 
     public LiveData<Classroom> getClassroomByName(String name) {
         BasicApp.getExecutors().diskIO().execute(() -> {
-                classroom = classroomDao.getClassroomByName(name);
+            classroom = classroomDao.getClassroomByName(name);
         });
         return classroom;
     }
 
     public int getTotalPresentCount() {
         BasicApp.getExecutors().diskIO().execute(() -> {
-                presentCount = classroomDao.getTotalPresentCount();
+            presentCount = classroomDao.getTotalPresentCount();
         });
         return presentCount;
     }
 
     public int getTotalAbsentCount() {
         BasicApp.getExecutors().diskIO().execute(() -> {
-                absentCount = classroomDao.getTotalAbsentCount();
+            absentCount = classroomDao.getTotalAbsentCount();
         });
         return absentCount;
     }
 
-    public void addPresentCount(int id) {
+    public void addPresentCount(int presentNo, int id) {
         BasicApp.getExecutors().diskIO().execute(() -> {
             BasicApp.getDatabase().runInTransaction(() -> {
-                classroomDao.updatePresentCount(getTotalPresentCount() + 1, id);
+                classroomDao.updatePresentCount(presentNo + 1, id);
             });
         });
     }
 
-    public void addAbsentCount(int id) {
+    public void addAbsentCount(int absentNo, int id) {
         BasicApp.getExecutors().diskIO().execute(() -> {
             BasicApp.getDatabase().runInTransaction(() -> {
-                classroomDao.updateAbsentCount(getTotalAbsentCount() + 1, id);
+                classroomDao.updateAbsentCount(absentNo + 1, id);
             });
         });
     }

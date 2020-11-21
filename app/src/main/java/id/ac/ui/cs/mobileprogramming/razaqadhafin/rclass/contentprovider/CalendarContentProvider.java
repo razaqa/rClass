@@ -15,15 +15,15 @@ import java.util.TimeZone;
 
 public class CalendarContentProvider {
 
-    private ContentResolver cr;
-    private Cursor cur;
+    private final ContentResolver cr;
+    private final Cursor cur;
     private long calendarID;
 
     public static final String[] EVENT_PROJECTION = new String[] {
-            CalendarContract.Calendars._ID,                           // 0
-            CalendarContract.Calendars.ACCOUNT_NAME,                  // 1
-            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,         // 2
-            CalendarContract.Calendars.OWNER_ACCOUNT                  // 3
+            CalendarContract.Calendars._ID,
+            CalendarContract.Calendars.ACCOUNT_NAME,
+            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
+            CalendarContract.Calendars.OWNER_ACCOUNT
     };
 
     private static final int PROJECTION_ID_INDEX = 0;
@@ -44,7 +44,9 @@ public class CalendarContentProvider {
 
     public long getOwnerCalendarID() {
         long calID;
-        long selectedCalID = 3;     // default calID for many devices
+        // default calID for many devices
+        long selectedCalID = 3;
+
         String displayName;
         String accountName;
         String ownerName;
