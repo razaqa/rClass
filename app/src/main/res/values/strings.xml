@@ -50,6 +50,7 @@
     <string name="calendar_add_notification">Schedule is saved on the calendar</string>
     <string name="notif_title">is currently ongoing</string>
     <string name="notif_desc">Don\'t forget to save your attendance! :)</string>
+    <string name="request_permission">You can\'t use sync to calendar</string>
 
     <!--
     This string is used for square devices and overridden by hello_world in

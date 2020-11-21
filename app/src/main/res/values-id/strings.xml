@@ -50,6 +50,7 @@
     <string name="calendar_add_notification">Jadwal telah disimpan ke kalender</string>
     <string name="notif_title">sedang berjalan</string>
     <string name="notif_desc">Jangan lupa absen ya! :)</string>
+    <string name="request_permission">Tidak dapat sinkronisasi dengan kalender</string>
 
     <!--
     This string is used for square devices and overridden by hello_world in

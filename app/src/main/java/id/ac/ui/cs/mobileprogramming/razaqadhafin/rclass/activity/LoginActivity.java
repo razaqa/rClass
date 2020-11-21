@@ -1,17 +1,21 @@
 package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -24,6 +28,8 @@ import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.LoginViewMode
 
 @SuppressLint("NonConstantResourceId")
 public class LoginActivity extends AppCompatActivity {
+
+    private static final int PERMISSION_CODE = 1;
 
     private LoginViewModel loginViewModel;
     private BroadcastReceiver broadcastReceiver;
@@ -39,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindString(R.string.change_new_account) String changeNewAccountText;
     @BindString(R.string.low_battery) String lowBatteryTextTitle;
     @BindString(R.string.low_battery_warning) String lowBatteryWarningText;
+    @BindString(R.string.request_permission) String requestPermissionText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +60,11 @@ public class LoginActivity extends AppCompatActivity {
         setUpLayoutBasedOnUser();
         stopService(new Intent(LoginActivity.this, NotificationService.class));
         startService(new Intent(LoginActivity.this, NotificationService.class));
+
+        checkPermission();
     }
 
-    public void setUpLayoutBasedOnUser() {
+    protected void setUpLayoutBasedOnUser() {
         loginViewModel.getUserCount().observe(this, count -> {
             if(count != 0) {
                 loginViewModel.getCurrentUser().observe(this, user -> {
@@ -70,6 +79,17 @@ public class LoginActivity extends AppCompatActivity {
                 buttonLogin.setEnabled(false);
             }
         });
+    }
+
+    protected void checkPermission() {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(getApplicationContext(),
+                    Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                    new String[] { Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR }, PERMISSION_CODE);
+        }
     }
 
     public void onButtonLoginClicked(View view) {
@@ -97,5 +117,16 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStop() {
         unregisterReceiver(broadcastReceiver);
         super.onStop();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        if (requestCode == PERMISSION_CODE) {
+            if (!(grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Toast.makeText(this, requestPermissionText, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
