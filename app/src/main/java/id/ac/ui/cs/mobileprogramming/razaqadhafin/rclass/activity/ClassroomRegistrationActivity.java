@@ -23,29 +23,19 @@ import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.Classroom;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.receiver.BatteryBroadcastReceiver;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.ClassroomRegistrationViewModel;
 
+@SuppressLint("NonConstantResourceId")
 public class ClassroomRegistrationActivity extends AppCompatActivity {
 
     private static final String DATE_FORMAT = "dd-MM-yyyy";
     private ClassroomRegistrationViewModel classroomRegistrationViewModel;
     private BroadcastReceiver broadcastReceiver;
 
-    @BindView(R.id.editTextClassroomName)
-    EditText editTextClassroomName;
-
-    @BindView(R.id.editTextClassroomStartDate)
-    EditText editTextClassroomStartDate;
-
-    @BindView(R.id.editTextClassroomEndDate)
-    EditText editTextClassroomEndDate;
-
-    @BindView(R.id.editTextClassroomSchedule)
-    EditText editTextClassroomSchedule;
-
-    @BindString(R.string.low_battery)
-    String lowBatteryTextTitle;
-
-    @BindString(R.string.low_battery_warning)
-    String lowBatteryWarningText;
+    @BindView(R.id.editTextClassroomName) EditText editTextClassroomName;
+    @BindView(R.id.editTextClassroomStartDate) EditText editTextClassroomStartDate;
+    @BindView(R.id.editTextClassroomEndDate) EditText editTextClassroomEndDate;
+    @BindView(R.id.editTextClassroomSchedule) EditText editTextClassroomSchedule;
+    @BindString(R.string.low_battery) String lowBatteryTextTitle;
+    @BindString(R.string.low_battery_warning) String lowBatteryWarningText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
