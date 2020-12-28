@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        System.loadLibrary("uppercase-word-jni");
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         broadcastReceiver = new BatteryBroadcastReceiver(lowBatteryTextTitle, lowBatteryWarningText);
@@ -64,11 +65,14 @@ public class LoginActivity extends AppCompatActivity {
         checkPermission();
     }
 
+    public native String uppercaseStringFromJNI(String input);
+
     protected void setUpLayoutBasedOnUser() {
         loginViewModel.getUserCount().observe(this, count -> {
             if(count != 0) {
                 loginViewModel.getCurrentUser().observe(this, user -> {
-                    textViewHello.setText(String.format("%s, %s!", welcomeBackText, user.getName()));
+                    String capitalizedName = user.getName() != null ? uppercaseStringFromJNI(user.getName()) : "";
+                    textViewHello.setText(String.format("%s, %s!", welcomeBackText, capitalizedName));
                     editTextPersonName.setText(user.getName());
                 });
                 buttonCreateAccount.setText(changeNewAccountText);
