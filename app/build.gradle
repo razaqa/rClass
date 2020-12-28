@@ -5,7 +5,8 @@ plugins {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    ndkVersion '22.0.7026061'
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass"
@@ -21,6 +22,12 @@ android {
         }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+        }
     }
 
     buildTypes {
