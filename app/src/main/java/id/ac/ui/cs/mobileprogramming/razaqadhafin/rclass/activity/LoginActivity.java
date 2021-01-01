@@ -89,10 +89,16 @@ public class LoginActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(getApplicationContext(),
-                    Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED
+                    Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(getApplicationContext(),
+                    Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED
         ) {
             requestPermissions(
-                    new String[] { Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR }, PERMISSION_CODE);
+                    new String[] {
+                            Manifest.permission.WRITE_CALENDAR,
+                            Manifest.permission.READ_CALENDAR,
+                            Manifest.permission.INTERNET
+                    }, PERMISSION_CODE);
         }
     }
 
