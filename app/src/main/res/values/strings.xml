@@ -48,9 +48,34 @@
     <string name="low_battery">Low Battery</string>
     <string name="low_battery_warning">Your battery is extremely low. Don\'t forget to save your attendance first before accidentally missing it..</string>
     <string name="calendar_add_notification">Schedule is saved on the calendar</string>
-    <string name="notif_title">is currently ongoing</string>
-    <string name="notif_desc">Don\'t forget to save your attendance! :)</string>
+
+    <string name="notif_course_title">is currently ongoing</string>
+    <string name="notif_course_desc">Don\'t forget to save your attendance! :)</string>
+    <string name="notif_weather_title">Today\'s weather: </string>
+    <string name="notif_weather_desc">Get prepared when going to class! :)</string>
+
     <string name="request_permission">You can\'t use sync to calendar</string>
+
+    <string name="weather_0">Clear Skies</string>
+    <string name="weather_1">Partly Cloudy</string>
+    <string name="weather_2">Partly Cloudy</string>
+    <string name="weather_3">Mostly Cloudy</string>
+    <string name="weather_4">Overcast</string>
+    <string name="weather_5">Haze</string>
+    <string name="weather_10">Smoke</string>
+    <string name="weather_45">Fog</string>
+    <string name="weather_60">Light Rain</string>
+    <string name="weather_61">Rain</string>
+    <string name="weather_63">Heavy Rain</string>
+    <string name="weather_80">Isolated Shower</string>
+    <string name="weather_95">Severe Thunderstorm</string>
+    <string name="weather_97">Severe Thunderstorm</string>
+    <string name="weather_100">Clear Skies</string>
+    <string name="weather_101">Partly Cloudy</string>
+    <string name="weather_102">Partly Cloudy</string>
+    <string name="weather_103">Mostly Cloudy</string>
+    <string name="weather_104">Overcast</string>
+    <string name="weather_null">Unknown</string>
 
     <!--
     This string is used for square devices and overridden by hello_world in
