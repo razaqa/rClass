@@ -53,6 +53,7 @@
     <string name="notif_course_desc">Jangan lupa absen ya! :)</string>
     <string name="notif_weather_title">Cuaca hari ini: </string>
     <string name="notif_weather_desc">Persiapkan diri anda ketika ke kampus! :)</string>
+    <string name="notif_not_connected">Mohon konek ke internet! :)</string>
 
     <string name="request_permission">Tidak dapat sinkronisasi dengan kalender</string>
 
