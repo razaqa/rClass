@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,6 +115,8 @@ public class ClassroomInfoFragment extends Fragment {
 
     @BindView(R.id.textViewHeaderUsername) TextView textViewHeaderUsername;
     @BindView(R.id.textViewHeaderPercentage) TextView textViewHeaderPercentage;
+    @BindView(R.id.textViewHeaderTime) TextView textViewHeaderTime;
+    @BindView(R.id.textViewHeaderDate) TextView textViewHeaderDate;
     @BindView(R.id.textViewValueName) TextView textViewValueName;
     @BindView(R.id.textViewValueStartDate) TextView textViewValueStartDate;
     @BindView(R.id.textViewValueEndDate) TextView textViewValueEndDate;
@@ -149,6 +152,25 @@ public class ClassroomInfoFragment extends Fragment {
     protected void setUpHeader() {
         dashboardViewModel.getCurrentUser().observe(Objects.requireNonNull(getActivity()),
                 user -> textViewHeaderUsername.setText(String.format(" %s", user.getName())));
+        final Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Date dateNow = new Date();
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM");
+                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+                String dateFormaText = dateFormat.format(dateNow);
+                String timeFormatText = timeFormat.format(dateNow);
+
+                if (true) {
+                    textViewHeaderDate.setText(dateFormaText);
+                    textViewHeaderTime.setText(timeFormatText);
+                }
+                handler.postDelayed(this, 1000);
+            }
+        });
     }
 
     protected void setUpContent() {

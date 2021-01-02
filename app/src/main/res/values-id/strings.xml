@@ -24,6 +24,8 @@
     <string name="header_percentage">0%</string>
     <string name="header_title_total">Total Kehadiran Kelas Kamu</string>
     <string name="header_title_selected">Kehadiran Kamu Untuk Kelas Ini</string>
+    <string name="header_time">00:00</string>
+    <string name="header_date">Senin, 12/02</string>
 
     <string name="title_fragment_classroom_list">Kelas - Semua</string>
     <string name="add_new_classroom">Tambah Kelas</string>
