@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        System.loadLibrary("uppercase-word-jni");
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         broadcastReceiver = new BatteryBroadcastReceiver(lowBatteryTextTitle, lowBatteryWarningText);
@@ -64,11 +65,14 @@ public class LoginActivity extends AppCompatActivity {
         checkPermission();
     }
 
+    public native String uppercaseStringFromJNI(String input);
+
     protected void setUpLayoutBasedOnUser() {
         loginViewModel.getUserCount().observe(this, count -> {
             if(count != 0) {
                 loginViewModel.getCurrentUser().observe(this, user -> {
-                    textViewHello.setText(String.format("%s, %s!", welcomeBackText, user.getName()));
+                    String capitalizedName = user.getName() != null ? uppercaseStringFromJNI(user.getName()) : "";
+                    textViewHello.setText(String.format("%s, %s!", welcomeBackText, capitalizedName));
                     editTextPersonName.setText(user.getName());
                 });
                 buttonCreateAccount.setText(changeNewAccountText);
@@ -85,10 +89,22 @@ public class LoginActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(getApplicationContext(),
-                    Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED
+                    Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(getApplicationContext(),
+                    Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(getApplicationContext(),
+                    Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(getApplicationContext(),
+                    Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED
         ) {
             requestPermissions(
-                    new String[] { Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR }, PERMISSION_CODE);
+                    new String[] {
+                            Manifest.permission.WRITE_CALENDAR,
+                            Manifest.permission.READ_CALENDAR,
+                            Manifest.permission.INTERNET,
+                            Manifest.permission.ACCESS_WIFI_STATE,
+                            Manifest.permission.ACCESS_NETWORK_STATE
+                    }, PERMISSION_CODE);
         }
     }
 

@@ -24,6 +24,8 @@
     <string name="header_percentage">0%</string>
     <string name="header_title_total">Total Kehadiran Kelas Kamu</string>
     <string name="header_title_selected">Kehadiran Kamu Untuk Kelas Ini</string>
+    <string name="header_time">00:00</string>
+    <string name="header_date">Senin, 12/02</string>
 
     <string name="title_fragment_classroom_list">Kelas - Semua</string>
     <string name="add_new_classroom">Tambah Kelas</string>
@@ -48,9 +50,36 @@
     <string name="low_battery">Baterai Lemah</string>
     <string name="low_battery_warning">Baterai lemah. Jangan lupa laporkan presensi terlebih dulu sebelum lupa..</string>
     <string name="calendar_add_notification">Jadwal telah disimpan ke kalender</string>
-    <string name="notif_title">sedang berjalan</string>
-    <string name="notif_desc">Jangan lupa absen ya! :)</string>
+
+    <string name="notif_course_title">sedang berjalan</string>
+    <string name="notif_course_desc">Jangan lupa absen ya! :)</string>
+    <string name="notif_weather_title">Cuaca hari ini: </string>
+    <string name="notif_weather_desc">Persiapkan diri anda ketika ke kampus! :)</string>
+    <string name="notif_not_connected">Mohon konek ke internet! :)</string>
+    <string name="notif_not_permitted">Mohon izinkan permission untuk menggunakan fitur</string>
+
     <string name="request_permission">Tidak dapat sinkronisasi dengan kalender</string>
+
+    <string name="weather_0">Cerah</string>
+    <string name="weather_1">Cerah Berawan</string>
+    <string name="weather_2">Cerah Berawan</string>
+    <string name="weather_3">Berawan</string>
+    <string name="weather_4">Berawan Tebal</string>
+    <string name="weather_5">Udara Kabur</string>
+    <string name="weather_10">Asap</string>
+    <string name="weather_45">Kabut</string>
+    <string name="weather_60">Hujan Ringan</string>
+    <string name="weather_61">Hujan Sedang</string>
+    <string name="weather_63">Hujan Lebat</string>
+    <string name="weather_80">Hujan Lokal</string>
+    <string name="weather_95">Hujan Petir</string>
+    <string name="weather_97">Hujan Petir</string>
+    <string name="weather_100">Cerah</string>
+    <string name="weather_101">Cerah Berawan</string>
+    <string name="weather_102">Cerah Berawan</string>
+    <string name="weather_103">Berawan</string>
+    <string name="weather_104">Berawan Tebal</string>
+    <string name="weather_null">Tidak Diketahui</string>
 
     <!--
     This string is used for square devices and overridden by hello_world in

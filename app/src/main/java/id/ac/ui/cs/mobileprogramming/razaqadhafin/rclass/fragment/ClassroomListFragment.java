@@ -2,6 +2,7 @@ package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -39,6 +42,8 @@ public class ClassroomListFragment extends Fragment  {
 
     @BindView(R.id.textViewHeaderUsername) TextView textViewHeaderUsername;
     @BindView(R.id.textViewHeaderPercentage) TextView textViewHeaderPercentage;
+    @BindView(R.id.textViewHeaderTime) TextView textViewHeaderTime;
+    @BindView(R.id.textViewHeaderDate) TextView textViewHeaderDate;
     @BindView(R.id.listViewClassroomAll) ListView listViewClassroomAll;
 
     @Nullable
@@ -65,6 +70,24 @@ public class ClassroomListFragment extends Fragment  {
 
         String percentage = dashboardViewModel.getHeaderPercentage();
         textViewHeaderPercentage.setText(percentage);
+        final Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Date dateNow = new Date();
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM");
+                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+                String dateFormaText = dateFormat.format(dateNow);
+                String timeFormatText = timeFormat.format(dateNow);
+
+                textViewHeaderDate.setText(dateFormaText);
+                textViewHeaderTime.setText(timeFormatText);
+
+                handler.postDelayed(this, 1000);
+            }
+        });
     }
 
     protected void setUpList() {
