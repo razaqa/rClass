@@ -43,7 +43,7 @@ public class NotificationService extends Service {
     private static final String NOTIFICATION_CHANNEL_DESC = "Courses that you have to attend";
     private static final String NOTIFICATION_NAME = "rClass";
     private static final String NOTIFICATION_TYPE = "Information";
-    private static final String NOTIFICATION_WEATHER_TIME = "12:06";
+    private static final String NOTIFICATION_WEATHER_TIME = "12:18";
 
     private static final String SOURCE_URL = "https://data.bmkg.go.id/";
 

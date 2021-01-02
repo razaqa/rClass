@@ -54,6 +54,7 @@
     <string name="notif_weather_title">Today\'s weather: </string>
     <string name="notif_weather_desc">Get prepared when going to class! :)</string>
     <string name="notif_not_connected">Please connect to internet! :)</string>
+    <string name="notif_not_permitted">Please permit the permission to use this feature</string>
 
     <string name="request_permission">You can\'t use sync to calendar</string>
 

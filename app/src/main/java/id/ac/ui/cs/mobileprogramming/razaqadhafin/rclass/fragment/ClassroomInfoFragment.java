@@ -1,6 +1,8 @@
 package id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.fragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,6 +36,7 @@ import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.viewmodel.DashboardView
 public class ClassroomInfoFragment extends Fragment {
 
     public static final String CLASS_NAME = "ClassroomInfoFragment";
+    private static final int PERMISSION_CODE = 1;
 
     private ClassroomInfoViewModel classroomInfoViewModel;
     private DashboardViewModel dashboardViewModel;
@@ -197,19 +201,45 @@ public class ClassroomInfoFragment extends Fragment {
                 selectedClass.getId());
     }
 
-    public void syncWithCalendar() {
-        String LOCATION = "Faculty of Computer Science UI";
+    protected void checkCalendarPermission() {
+        if (ContextCompat.checkSelfPermission(requireActivity(),
+                Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(requireActivity(),
+                Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                    new String[] {
+                            Manifest.permission.WRITE_CALENDAR,
+                            Manifest.permission.READ_CALENDAR
+                    }, PERMISSION_CODE);
+        }
+    }
 
-        CalendarContentProvider provider = new CalendarContentProvider(Objects.requireNonNull(getActivity()));
-        CalendarEvent event = new CalendarEvent(
-                selectedClass.getName(),
-                selectedClass.getName(),
-                selectedAttendance.getStartHour(),
-                selectedAttendance.getEndHour(),
-                LOCATION,
-                false
-        );
-        provider.addEvent(event);
-        Toast.makeText(getActivity(), calendarAddNotification, Toast.LENGTH_SHORT).show();
+    protected boolean isPermitted() {
+        return ContextCompat.checkSelfPermission(requireActivity(),
+                    Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(requireActivity(),
+                    Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void syncWithCalendar() {
+        checkCalendarPermission();
+        if (isPermitted()) {
+            String LOCATION = "Faculty of Computer Science UI";
+
+            CalendarContentProvider provider = new CalendarContentProvider(Objects.requireNonNull(getActivity()));
+            CalendarEvent event = new CalendarEvent(
+                    selectedClass.getName(),
+                    selectedClass.getName(),
+                    selectedAttendance.getStartHour(),
+                    selectedAttendance.getEndHour(),
+                    LOCATION,
+                    false
+            );
+            provider.addEvent(event);
+            Toast.makeText(getActivity(), calendarAddNotification, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), getResources().getString(R.string.notif_not_permitted), Toast.LENGTH_SHORT).show();
+        }
     }
 }
