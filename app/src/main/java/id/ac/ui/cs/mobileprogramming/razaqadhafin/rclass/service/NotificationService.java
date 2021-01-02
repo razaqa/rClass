@@ -29,6 +29,7 @@ import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.api.WeatherClientAPI;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.application.BasicApp;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.Attendance;
 import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.entity.Classroom;
+import id.ac.ui.cs.mobileprogramming.razaqadhafin.rclass.manager.ConnectivityCheck;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,7 +43,7 @@ public class NotificationService extends Service {
     private static final String NOTIFICATION_CHANNEL_DESC = "Courses that you have to attend";
     private static final String NOTIFICATION_NAME = "rClass";
     private static final String NOTIFICATION_TYPE = "Information";
-    private static final String NOTIFICATION_WEATHER_TIME = "05:11";
+    private static final String NOTIFICATION_WEATHER_TIME = "12:06";
 
     private static final String SOURCE_URL = "https://data.bmkg.go.id/";
 
@@ -183,6 +184,16 @@ public class NotificationService extends Service {
             });
         }
 
+        protected void notifyWeatherWhenNoInternet() {
+            String title = getResources()
+                    .getString(R.string.notif_weather_title) + " " +
+                    getResources().getString(R.string.weather_null);
+            String description = getResources()
+                    .getString(R.string.notif_not_connected);
+
+            notificationDialog(title, description);
+        }
+
         protected String decodeWeatherStatus(String value) {
             String result;
             switch (value) {
@@ -265,7 +276,12 @@ public class NotificationService extends Service {
                     minute = temp;
                     checkCourse(dNowStr);
                     if (dNowHourStr.equals(NOTIFICATION_WEATHER_TIME)) {
-                        notifyWeather();
+                        boolean isConnected = ConnectivityCheck.isNetworkConnected(getApplicationContext());
+                        if (isConnected) {
+                            notifyWeather();
+                        } else {
+                            notifyWeatherWhenNoInternet();
+                        }
                     }
                 }
             }
